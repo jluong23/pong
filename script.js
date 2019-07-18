@@ -158,7 +158,7 @@ let context = canvas.getContext("2d");
 
 
 let players = [
-    new Bot (0,20,100,"black"),
+    new Player (0,20,100,"black"),
     new Bot (canvas.width - 20, 20, 100, "black")
 ]
 
