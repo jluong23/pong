@@ -41,6 +41,7 @@ class Ball extends Circle{
         this.vx = dir* 15
         this.vy = 5
         this.speed = Math.sqrt(this.vx*this.vx+this.vy*this.vy)
+        screenBalls.push(this);
     }
 
     isOut(){

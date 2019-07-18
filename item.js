@@ -48,7 +48,7 @@ class Multiball extends Item{
         //if left paddle last touched, set x = 0.
         //if right paddle last touched, set x = canvas.width -r
 
-        let loopId = setInterval(function(){
+        let loopId = setInterval(function(){ //loop used to send pink balls at a regular interval
             if (numBalls == numCalls){
                 clearInterval(loopId)
             }

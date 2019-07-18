@@ -47,19 +47,24 @@ function update(){
             }
         })
 
-
         if (ball.isOut()){
             attacker.score+=ball.scoreInc;
             if (ball.color == "black"){ //black ball is the main ball
+                clearScreen();
                 ball.reset(attacker); //reset ball given object argument of the scorer
+                
             }
-            else(
+            else( //case where non black ball goes out
                 screenBalls.splice(screenBalls.indexOf(ball),1)
             )
         }
     })
 }
 
+function clearScreen(){
+    screenItems=[];
+    screenBalls = [];
+}
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min+1)) + min;
 }
@@ -108,7 +113,7 @@ function placeItemLoop(sliderChange){
             }            
         },dropRate);
     }
-    itemLoopCalled = true; //don't recall function if the loop has already been called
+    // itemLoopCalled = true; //don't recall function if the loop has already been called (otherwise loops will stack)
 }
 function preloadImages(subfolder,srcs){ //return array called images which hold image objects, assuming all images are within subfolder
     let images = [];
@@ -158,8 +163,8 @@ let context = canvas.getContext("2d");
 
 
 let players = [
-    new Player (0,20,100,"black"),
-    new Bot (canvas.width - 20, 20, 100, "black")
+    new Bot (0,20,100,"black"),
+    new Player (canvas.width - 20, 20, 100, "black")
 ]
 
 let images = preloadImages("assets",["reverse.png","multiball.png"])
@@ -180,6 +185,6 @@ let fps = 1000/60;
 let running = true; //state of game
 let itemLoopCalled = false;
 let itemLoopId 
-let itemsOn = true;
+let itemsOn = false;
 setPlayerCtrls();
 let animId = setInterval(mainLoop, fps); //start main loop
