@@ -2,17 +2,31 @@
 <html lang="en">
 <head>
     <title>Pong Game</title>
-
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <style>
+       
+    </style>
 </head>
 <body>
     <h1>Pong Game</h1>
-    <canvas id = "gameCanvas" style="border: 10px solid blue"></canvas><br>
-    <input id = "difficultySlider" type="range" min = "10" max = "50" step = "1" value="15">
+    <canvas id = "gameCanvas" style="border: 10px solid black"></canvas><br>
+    <div>
+        Bot Difficulty
+        <input id = "difficultySlider" class ="options"  type="range" min = "1" max = "5" step = "1" value="1">
+        <br>
+        Item drop rate
+        <input id = "itemSlider" class = "options" type="range" min = "1000" max = "10000" step = "1000" value="5000">
+        <br>
+    </div><br>
+    
+    
+
+    <button onclick="pauseGame()">Toggle Pause</button>
+    <script src ="shapes.js"></script>
+    <script src ="item.js"></script>
     <script src="paddle.js"></script>
     <script src="ball.js"></script>
     <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    
 </body>
-
 </html> 
