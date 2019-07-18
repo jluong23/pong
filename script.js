@@ -113,7 +113,7 @@ function placeItemLoop(sliderChange){
             }            
         },dropRate);
     }
-    // itemLoopCalled = true; //don't recall function if the loop has already been called (otherwise loops will stack)
+    itemLoopCalled = true; //don't recall function if the loop has already been called (otherwise loops will stack)
 }
 function preloadImages(subfolder,srcs){ //return array called images which hold image objects, assuming all images are within subfolder
     let images = [];
