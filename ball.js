@@ -17,7 +17,7 @@ class Ball extends Circle{
         return (dx*dx + dy*dy < this.r*this.r) //if closest point is within circle, must be intersecting
     }
 
-    reboundPaddle(p){
+    rebound(p){
         let normCollisionPoint = (this.y - (p.y + p.height/2))/p.height/2; //collision on paddle: top = -1, mid = 0, bot = 1
         let angle = normCollisionPoint * Math.PI
         let dir = (this.x<canvas.width/2) ? 1 : -1;

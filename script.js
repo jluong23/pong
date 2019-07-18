@@ -7,30 +7,37 @@ function render(){
     context.clearRect(0,0,canvas.width,canvas.height); //clear screen for each render
     drawNet();
     showText();
-    screenItems.forEach(function(item){
+    screenItems.forEach(function(item){ //draw all items
         item.drawImage();
     })
-    p1.draw();
-    bot.draw();
-    screenBalls.forEach(function(ball){
+    players.forEach(function(player){ //draw all players
+        player.draw();
+    })
+    screenBalls.forEach(function(ball){ //draw all balls
         ball.draw();
     })
 }
 
 function update(){
-    placeItemLoop();
-    bot.move();
-
+    if (itemsOn){
+        placeItemLoop();
+    }
+    players.forEach(function(player){ //if the class of the player is a bot, move the bot
+        
+        if(player.name == "Bot"){
+            player.move();
+        }
+    })
     screenBalls.forEach(function(ball){
         ball.x += ball.vx;
         ball.y += ball.vy;
         ball.touchWall() ? ball.vy *= -1 : ball.vy *=1; //If ball touches wall, reverse vertical velocity
 
-        let defender = (ball.x<canvas.width/2) ? p1 : bot; //if ball is on left side of canvas, only left player can hit paddle and vice versa
-        let attacker = (ball.x<canvas.width/2) ? bot: p1;
+        let defender = (ball.x<canvas.width/2) ? players[0] : players[1]; //if ball is on left side of canvas, only left player can hit paddle and vice versa
+        let attacker = (ball.x<canvas.width/2) ? players[1]: players[0];
 
         if (ball.touchRect(defender)){
-            ball.reboundPaddle(defender);
+            ball.rebound(defender);
         }
         screenItems.forEach(function(item){
 
@@ -45,7 +52,6 @@ function update(){
             attacker.score+=ball.scoreInc;
             if (ball.color == "black"){ //black ball is the main ball
                 ball.reset(attacker); //reset ball given object argument of the scorer
-                resetScreen();
             }
             else(
                 screenBalls.splice(screenBalls.indexOf(ball),1)
@@ -69,12 +75,25 @@ function drawNet(){
 function showText(){
     context.fillStyle = "black";
     context.font = "40px Arial";
-    context.fillText(`P1 Score = ${p1.score}`,10,50)
-    context.fillText(`Bot Score = ${bot.score}` ,canvas.width - 320,50)
+    context.fillText(`${players[0].name} Score = ${players[0].score}`,10,50)
+    context.fillText(`${players[1].name} Score = ${players[1].score}` ,canvas.width - 300,50)
+    document.getElementById("difficulty").innerHTML = ` Bot level ${document.getElementById("difficultySlider").value}`;
+    document.getElementById("droprate").innerHTML = ` Spawn item every ${document.getElementById("itemSlider").value/1000} seconds`;
+
 }
 
-function placeItemLoop(){ 
+function stopItemLoop(){
+    clearInterval(itemLoopId);
+    itemLoopCalled = false;
+}
+
+function placeItemLoop(sliderChange){ 
+
     dropRate = parseInt(document.getElementById("itemSlider").value);
+    if (sliderChange){
+        stopItemLoop();
+    }
+
     if (!itemLoopCalled){ //If item loop has not been called yet, start placing items every x seconds
         itemLoopId = setInterval(function(){
             if (running){ //only place an item if the game is running
@@ -111,36 +130,41 @@ function pauseGame(){
     }
 }
 
-function defMouseCtrls(){
-    // Mouse Controls
-    canvas.onmousemove = function(e){
-        let rect = canvas.getBoundingClientRect();
-        p1.y = event.y - rect.top - p1.height/2
-        // bot.y = event.y - rect.top - bot.height/2
-    }
+function setPlayerCtrls(){
+    players.forEach(function(player){
+        if(player.name == "Player"){
+            canvas.onmousemove = function(e){
+                let rect = canvas.getBoundingClientRect();
+                player.y = event.y - rect.top - player.height/2
+                // bot.y = event.y - rect.top - bot.height/2
+        }}
+    })
 }
 
-function resetScreen(){    
-    screenItems = [];
-    screenBalls = [new Ball(canvas.width/2, canvas.height/2, 25,-13,5,"black",1)];
-
+function toggleItems(){
+    if(itemsOn){ 
+        itemsOn = false;
+        screenItems = [];
+        stopItemLoop();
+    }
+    else{
+        itemsOn = true;
+    }
 }
 let canvas = document.getElementById("gameCanvas");
 canvas.width = "1000";
 canvas.height = "1000";
 let context = canvas.getContext("2d");
 
-let p1 = new Paddle (0, 20, 100, "black");
-let bot = new Bot (canvas.width - 20, 20, 100, "black");
+
+let players = [
+    new Bot (0,20,100,"black"),
+    new Bot (canvas.width - 20, 20, 100, "black")
+]
 
 let images = preloadImages("assets",["reverse.png","multiball.png"])
-
-
 let screenItems = [];
 let screenBalls = [new Ball(canvas.width/2, canvas.height/2, 25,-13,5,"black",1)];
-
-
-
 
 // document.addEventListener('keydown', event =>{
 //     console.log(event)
@@ -153,8 +177,9 @@ let screenBalls = [new Ball(canvas.width/2, canvas.height/2, 25,-13,5,"black",1)
 
 
 let fps = 1000/60;
-defMouseCtrls();
 let running = true; //state of game
 let itemLoopCalled = false;
 let itemLoopId 
+let itemsOn = true;
+setPlayerCtrls();
 let animId = setInterval(mainLoop, fps); //start main loop

@@ -4,24 +4,27 @@
     <title>Pong Game</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <style>
-       
+       #itemSlider{
+           direction: rtl
+       }
     </style>
 </head>
 <body>
     <h1>Pong Game</h1>
     <canvas id = "gameCanvas" style="border: 10px solid black"></canvas><br>
     <div>
-        Bot Difficulty
+        Bot difficulty
         <input id = "difficultySlider" class ="options"  type="range" min = "1" max = "5" step = "1" value="1">
-        <br>
+        <p id = "difficulty"></p>
         Item drop rate
-        <input id = "itemSlider" class = "options" type="range" min = "1000" max = "10000" step = "1000" value="5000">
-        <br>
-    </div><br>
+        <input id = "itemSlider" class = "options" type="range" min = "500" max = "10000" step = "1000" value="5000" onchange="placeItemLoop(true)">
+        <p id = "droprate"></p>
+        <button onclick="toggleItems()">Toggle Items</button>
+        <button onclick="pauseGame()">Toggle Pause</button>
+    </div>
     
     
 
-    <button onclick="pauseGame()">Toggle Pause</button>
     <script src ="shapes.js"></script>
     <script src ="item.js"></script>
     <script src="paddle.js"></script>

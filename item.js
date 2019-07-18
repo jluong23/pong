@@ -4,7 +4,7 @@ class Reverser extends Item{
     }
 
     use(){
-        screenBalls[0].vx *=-1
+        screenBalls[0].rebound(this)
         // alert("test")
         // setTimeout(defMouseCtrls, 5000);
     //     let alreadyRan = false; let initMousePos = 0;
@@ -39,11 +39,14 @@ class Multiball extends Item{
     use(){
         let numBalls = getRndInteger(1,4); //spawn between 1 or 4 balls inclusive
         let numCalls = 0;
-        let lastTouched = screenBalls[0].vx > 0 ? p1 : bot; //velocity of black ball
-        let dir = lastTouched == p1 ? 1 : -1; //direction of balls to travel, dependent on player who last touched the ball
+        let lastTouched = screenBalls[0].vx > 0 ? players[0] : players[1]; //velocity of black ball
+        let dir = lastTouched == players[0] ? 1 : -1; //direction of balls to travel, dependent on player who last touched the ball
         let r = 25; //radius of new balls
-        let vx = 5; //speed of new balls
-        let x = lastTouched == p1 ? 0 : canvas.width - r; //starting x value of new balls, dependent on player who last touched the ball
+        let vx = 10; //speed of new balls
+        let x = lastTouched == players[0] ? 0 : canvas.width - r; 
+        //starting x value of new balls, dependent on player who last touched the ball
+        //if left paddle last touched, set x = 0.
+        //if right paddle last touched, set x = canvas.width -r
 
         let loopId = setInterval(function(){
             if (numBalls == numCalls){
